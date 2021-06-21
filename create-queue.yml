@@ -28,18 +28,21 @@ parameters:
   values:
   - exclusive
   - non-exclusive
+  default: non-exclusive
 
 - name: egressEnabled
   type: string
   values:
   - true
   - false
+  default: true
 
 - name: ingressEnabled
   type: string
   values:
   - true
   - false
+  default: true
 
 - name: permission
   type: string
