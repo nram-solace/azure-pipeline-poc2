@@ -1,0 +1,5 @@
+---
+size: 100
+queues:
+  - queue1
+  - queue2
