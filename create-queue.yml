@@ -80,25 +80,28 @@ stages:
             generate_post_data()
             {
               cat <<EOF
-            {
-              "accessType":"${{parameters.accessType}}",
-              "queueName":"${{parameters.queueName}}",
-              "permission":"${{parameters.permission}}",
-              "ingressEnabled":${{parameters.ingressEnabled}},
-              "egressEnabled":${{parameters.egressEnabled}},
-              "maxBindCount":${{parameters.maxBindCount}},
-              "maxMsgSpoolUsage":${{parameters.maxMsgSpoolUsage}},
-              "owner":"${{parameters.owner}}"
-            }
+                {
+                  "accessType":"${{parameters.accessType}}",
+                  "queueName":"${{parameters.queueName}}",
+                  "permission":"${{parameters.permission}}",
+                  "ingressEnabled":${{parameters.ingressEnabled}},
+                  "egressEnabled":${{parameters.egressEnabled}},
+                  "maxBindCount":${{parameters.maxBindCount}},
+                  "maxMsgSpoolUsage":${{parameters.maxMsgSpoolUsage}},
+                  "owner":"${{parameters.owner}}"
+                }
             EOF
             }
-            # echo "$(generate_post_data)"
+            echo "DATA:\n $(generate_post_data)"
             tempfile=$(mktemp)
-            code=$(curl -s --location -u $(USER):$(SEMPPASS) --request POST 'https://$(HOST)/SEMP/v2/__private_config__/msgVpns/$(VPN)/queues?select=queueName,msgVpnName' \
+            echo "tempfile $(tempfile)"
+            echo "SEMPUSER : $(SEMPUSER)"
+            echo "curl -s --location -u $(SEMPUSER):***** --request POST https://$(HOST)/SEMP/v2/msgVpns/$(VPN)/queues?select=queueName,msgVpnName ..."
+            code=$(curl -s --location -u $(SEMPUSER):$(SEMPPASS) --request POST 'https://$(HOST)/SEMP/v2/msgVpns/$(VPN)/queues?select=queueName,msgVpnName' \
             --header 'Content-Type:application/json' \
             --data-raw "$(generate_post_data)" \
             --write-out '%{http_code}' -o $tempfile)
-              # echo $code
+              echo "return code: $code"
               if [[ $code == 200 ]]
               then
                 echo "status : $code : ${{parameters.queueName}} queue successfully created"
@@ -128,8 +131,8 @@ stages:
               # echo "${{parameters.subscriptionName}}""
               # variable=${{parameters.subscriptionName}}
               # for subscription in ${variable//,/ }
-              echo "$subscription"
-              code1=$(curl -s --location -u $(USER):$(SEMPPASS) --request POST 'https://$(HOST)/SEMP/v2/__private_config__/msgVpns/$(VPN)/queues/${{parameters.queueName}}/subscriptions?select=subscriptionTopic,msgVpnName,queueName' \
+              echo "add subscription $subscription"
+              code1=$(curl -s --location -u $(SEMPUSER):$(SEMPPASS) --request POST 'https://$(HOST)/SEMP/v2/__private_config__/msgVpns/$(VPN)/queues/${{parameters.queueName}}/subscriptions?select=subscriptionTopic,msgVpnName,queueName' \
               --header 'Content-Type:application/json' \
               --data-raw '{
                     "queueName":"${{parameters.queueName}}",
