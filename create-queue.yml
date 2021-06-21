@@ -106,8 +106,8 @@ stages:
             tempfile=$(mktemp)
             echo "tempfile $(tempfile)"
             echo "SEMPUSER : $(SEMPUSER)"
-            echo "curl -s --location -u $(SEMPUSER):***** --request POST https://$(HOST)/SEMP/v2/msgVpns/$(VPN)/queues?select=queueName,msgVpnName ..."
-            code=$(curl -s --location -u $(SEMPUSER):$(SEMPPASS) --request POST 'https://$(HOST)/SEMP/v2/msgVpns/$(VPN)/queues?select=queueName,msgVpnName' \
+            echo "curl -s --location -u $(SEMPUSER):***** --request POST $(HOST)/SEMP/v2/config/msgVpns/$(VPN)/queues?select=queueName,msgVpnName ..."
+            code=$(curl -s --location -u $(SEMPUSER):$(SEMPPASS) --request POST '$(HOST)/SEMP/v2/config/msgVpns/$(VPN)/queues?select=queueName,msgVpnName' \
             --header 'Content-Type:application/json' \
             --data-raw "$(generate_post_data)" \
             --write-out '%{http_code}' -o $tempfile)
