@@ -3,3 +3,4 @@ size: 100
 queues:
   - queue1
   - queue2
+  - queue3
