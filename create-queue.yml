@@ -16,7 +16,7 @@ parameters:
     - localhost
     - nram-dev1.messaging.solace.cloud
     - nram-dev2-aws-ohio.messaging.solace.cloud
-  default: localhost
+  default: nram-dev2-aws-ohio.messaging.solace.cloud
 
 - name: queueName
   type: string
