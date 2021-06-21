@@ -18,7 +18,6 @@ parameters:
     - nram-dev2-aws-ohio.messaging.solace.cloud
   default: localhost
 
-
 - name: queueName
   type: string
   default: 'azure-poc-queue'
@@ -29,16 +28,19 @@ parameters:
   values:
   - exclusive
   - non-exclusive
+
 - name: egressEnabled
   type: string
   values:
   - true
   - false
+
 - name: ingressEnabled
   type: string
   values:
   - true
   - false
+
 - name: permission
   type: string
   values:
@@ -47,10 +49,15 @@ parameters:
   - read-only
   - modify-topic
   - delete
+  default: read-only
+
 - name: maxMsgSpoolUsage
   default: 1500
   type: number
+
 - name: owner
+  default: 'default'
+  type: string
 
 - name: maxBindCount
   type: number
