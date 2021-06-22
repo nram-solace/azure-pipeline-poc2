@@ -6,6 +6,8 @@ defaults:
   'maxTtl' : 1000
   'respectTtlEnabled': true
   'maxBindCount' : 100
+  'ingressEnabled' : true
+  'egressEnabled' : true
 
 queues:
   - queue1
@@ -13,3 +15,5 @@ queues:
   - queue3
   - queue4
   - queue5
+  - queue6
+  - queue7
