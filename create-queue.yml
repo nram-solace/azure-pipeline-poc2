@@ -20,7 +20,7 @@ parameters:
 
 - name: queueName
   type: string
-  default: 'azure-poc-queue'
+  default: 'azure-poc-queue-1'
   displayName: Please provide the queueName
 
 - name: accessType
