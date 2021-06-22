@@ -20,7 +20,7 @@ parameters:
 
 variables:
  - group: ${{ parameters.serviceSelection }}
- 
+
 stages:
   - stage: checkoutRepo
     jobs:
@@ -42,7 +42,7 @@ stages:
         inputs:
           scriptSource: 'filePath' # Options: filePath, inline
           scriptPath: scripts/provision-queue.py
-          arguments: --host $HOST --user $SEMPUSER --pass $SEMPPASS
+          arguments: --host $(HOST) --user $(SEMPUSER) --pass $(SEMPPASS)
           #pythonInterpreter: # Optional
           #workingDirectory: # Optional
           #failOnStderr: false # Optional
