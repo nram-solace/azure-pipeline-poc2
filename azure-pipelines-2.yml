@@ -27,6 +27,12 @@ stages:
           - bash: echo "###Azure Repo Checkout###"
   - stage: createqueue
     jobs:
+    - job:
+      steps:
+        - script: echo creating queue prep
+        - bash: |
+            echo "HOST : $HOST"
+            echo "SEMPUSER: $SEMPUSER"
     - job: createqueuejob1
       steps:
       - task: PythonScript@0
