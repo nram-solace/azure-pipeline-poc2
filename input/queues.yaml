@@ -1,6 +1,6 @@
 ---
 defaults:
-  'msgVpnName' : 'testvpn2'
+  'msgVpnName' : 'nram-dev2-aws-ohio'
   'owner' : testuser
   'maxMsgSpoolUsage' : 1000
   'maxTtl' : 1000
