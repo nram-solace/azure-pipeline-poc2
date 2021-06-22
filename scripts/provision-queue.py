@@ -64,6 +64,7 @@ def main(argv):
         data = template_data.copy()
         data['queueName'] = queue
         if status == 200:
+            print (f'Queue {queue} exists. Update settings instead of creating')
             print (f'Shutting down queue {queue} before updates')
             # shutdown queue before making changes
             temp_data = data.copy()
@@ -75,7 +76,7 @@ def main(argv):
             print (f'Updating queue {queue}')
             update_queue(q_url, r.user, r.passwd, data)
         else:
-            print (f'Creating queue {queue}')
+            print (f'Queue does not exist. Create queue {queue}')
             create_queue(url, r.user, r.passwd, data)
 
 def get_queue(url, user, passwd):
