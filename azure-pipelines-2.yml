@@ -19,21 +19,21 @@ parameters:
   default: nram-dev2-aws-ohio.messaging.solace.cloud
 
 stages:
-  - stage: checkoutrepo
+  - stage: checkout-repo-stage
     jobs:
-      - job: checkoutrepojob
+      - job: checkout-repo-job
         steps:
           - checkout: self
           - bash: echo "###Azure Repo Checkout###"
-  - stage: createqueue
+  - stage: provision-queue-stage
     jobs:
-    - job:
+    - job: provision-queue-prep-job
       steps:
         - script: echo creating queue prep
         - bash: |
             echo "HOST : $HOST"
             echo "SEMPUSER: $SEMPUSER"
-    - job: createqueuejob1
+    - job: provision-queue-script-job
       steps:
       - task: PythonScript@0
         inputs:
