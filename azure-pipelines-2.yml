@@ -1,0 +1,39 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: serviceSelection
+  type: string
+  values:
+    - localhost
+    - nram-dev1.messaging.solace.cloud
+    - nram-dev2-aws-ohio.messaging.solace.cloud
+  default: nram-dev2-aws-ohio.messaging.solace.cloud
+
+stages:
+  - stage: checkoutrepo
+    jobs:
+      - job: checkoutrepojob
+        steps:
+          - checkout: self
+          - bash: echo "###Azure Repo Checkout###"
+  - stage: createqueue
+    jobs:
+    - job: createqueuejob1
+      steps:
+      - task: PythonScript@0
+        inputs:
+          scriptSource: 'filePath' # Options: filePath, inline
+          scriptPath: scripts/provision-queue.py
+          arguments: --host $HOST --user $SEMPUSER --pass $SEMPPASS
+          #pythonInterpreter: # Optional
+          #workingDirectory: # Optional
+          #failOnStderr: false # Optional
