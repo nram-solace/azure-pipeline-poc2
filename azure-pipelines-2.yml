@@ -18,6 +18,9 @@ parameters:
     - nram-dev2-aws-ohio.messaging.solace.cloud
   default: nram-dev2-aws-ohio.messaging.solace.cloud
 
+variables:
+ - group: ${{ parameters.serviceSelection }}
+ 
 stages:
   - stage: checkoutRepo
     jobs:
