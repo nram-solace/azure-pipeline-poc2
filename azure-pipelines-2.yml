@@ -24,19 +24,23 @@ variables:
 stages:
   - stage: checkoutRepo
     jobs:
-      - job: checkoutRepoJob
+      - job: checkoutRepo
         steps:
           - checkout: self
           - bash: echo "###Azure Repo Checkout###"
-  - stage: provisionQueueStage
+  
+  - stage: provisionQueuePrep
     jobs:
-    - job: provisionQueuePrepJob
+    - job: provisionQueuePrep
       steps:
         - script: echo creating queue prep
         - bash: |
             echo "HOST : $HOST"
             echo "SEMPUSER: $SEMPUSER"
-    - job: provisionQueueScriptJob
+
+  - stage: provisionQueue
+    jobs:
+    - job: provisionQueue
       steps:
       - task: PythonScript@0
         inputs:
