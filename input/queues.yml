@@ -1,0 +1,14 @@
+---
+defaults:
+  'msgVpnName' : 'nram-dev2-aws-ohio'
+  'owner' : testuser
+  'maxMsgSpoolUsage' : 1000
+  'maxTtl' : 1000
+  'respectTtlEnabled': true
+  'maxBindCount' : 100
+  'ingressEnabled' : true
+  'egressEnabled' : true
+
+queues:
+  - queue11
+  - queue12
