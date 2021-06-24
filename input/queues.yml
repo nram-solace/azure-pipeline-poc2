@@ -12,3 +12,4 @@ defaults:
 queues:
   - queue11
   - queue12
+  - queue13
