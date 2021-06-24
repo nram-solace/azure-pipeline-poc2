@@ -5,7 +5,7 @@ message_vpn:
 
 #queues
 queues:
-- queue_name: ansible-test-queue-11
+- queue_name: ansible-test-queue-13
   subscription_topics:
   - "test/ansible/1"
   - "test/ansible/2"
@@ -15,7 +15,7 @@ queues:
   egress_enabled: true
   permission: "consume"
 
-- queue_name: ansible-test-queue-21
+- queue_name: ansible-test-queue-23
   subscription_topics:
   - "another/ansible/test/>"
   access_type: "non-exclusive"
