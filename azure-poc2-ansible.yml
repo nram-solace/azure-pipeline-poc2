@@ -17,5 +17,5 @@ steps:
   displayName: 'Install Ansible and the Azure modules'
   condition: 
 
-- script: ansible-playbook create-queues.yml -i inventory.ini
+- script: ansible-playbook ansible-create-queues.yml -i ansible-inventory.ini
   displayName: 'Run Ansible Playbook'
