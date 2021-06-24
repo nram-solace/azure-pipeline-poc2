@@ -10,6 +10,5 @@ defaults:
   'egressEnabled' : true
 
 queues:
-  - queue11
-  - queue12
-  - queue13
+  - queue21
+  - queue22
