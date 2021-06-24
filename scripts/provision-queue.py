@@ -27,7 +27,7 @@ import yaml
 import json
 import requests
 
-input_yaml_file="input/queues.yaml"
+input_yaml_file="input/queues.yml"
 template_json_file="template/queues.json"
 config_url='SEMP/v2/config'
 
