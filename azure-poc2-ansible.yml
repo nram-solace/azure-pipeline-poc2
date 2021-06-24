@@ -9,10 +9,24 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: pip install ansible[azure]
-  displayName: 'Install Ansible and the Azure modules'
-  condition: 
+stages:
+  - stage: CheckoutRepo
+    jobs:
+      - job: checkoutRepo
+        steps:
+          - checkout: self
+          - bash: echo "###Azure Repo Checkout###"
 
-- script: ansible-playbook ansible-create-queues.yml -i ansible-inventory.ini
-  displayName: 'Run Ansible Playbook'
+  - stage: PrepPlaybook
+    jobs:
+      - job: prepPlaybook
+        steps:
+        - script: pip install ansible[azure]
+          displayName: 'Install Ansible and the Azure modules'
+          condition: 
+
+  - stage: RunPlaybook
+    jobs:
+      - job: runPlaybook
+      - script: ansible-playbook create-queues.yml -i inventory.ini
+        displayName: 'Run Ansible Playbook'
