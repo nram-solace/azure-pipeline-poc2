@@ -1,0 +1,164 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: serviceSelection
+  type: string
+  values:
+    - localhost
+    - nram-dev1.messaging.solace.cloud
+    - nram-dev2-aws-ohio.messaging.solace.cloud
+  default: nram-dev2-aws-ohio.messaging.solace.cloud
+
+- name: queueName
+  type: string
+  default: 'azure-poc-queue-1'
+  displayName: Please provide the queueName
+
+- name: accessType
+  type: string
+  values:
+  - exclusive
+  - non-exclusive
+  default: non-exclusive
+
+- name: egressEnabled
+  type: string
+  values:
+  - true
+  - false
+  default: true
+
+- name: ingressEnabled
+  type: string
+  values:
+  - true
+  - false
+  default: true
+
+- name: permission
+  type: string
+  values:
+  - consume
+  - no-access
+  - read-only
+  - modify-topic
+  - delete
+  default: read-only
+
+- name: maxMsgSpoolUsage
+  default: 1500
+  type: number
+
+- name: owner
+  default: 'default'
+  type: string
+
+- name: maxBindCount
+  type: number
+  default: 100
+
+- name: 'subscriptionName'
+  type: string    
+  default: 'test/nram/azure/poc/1,test/nram/azure/poc/2'
+  displayName: Please provide the subscriptionName comma "," to create multiple topics
+
+variables:
+ - group: ${{ parameters.serviceSelection }}
+
+stages:
+  - stage: checkoutrepo
+    jobs:
+      - job: checkoutrepojob
+        steps:
+          - checkout: self
+          - bash: echo "###Azure Repo Checkout###"
+  - stage: createqueue
+    jobs:
+    - job: createqueuejob1
+      steps:
+        - script: echo creating queue
+        - bash: |
+            generate_post_data()
+            {
+              cat <<EOF
+                {
+                  "accessType":"${{parameters.accessType}}",
+                  "queueName":"${{parameters.queueName}}",
+                  "permission":"${{parameters.permission}}",
+                  "ingressEnabled":${{parameters.ingressEnabled}},
+                  "egressEnabled":${{parameters.egressEnabled}},
+                  "maxBindCount":${{parameters.maxBindCount}},
+                  "maxMsgSpoolUsage":${{parameters.maxMsgSpoolUsage}},
+                  "owner":"${{parameters.owner}}"
+                }
+            EOF
+            }
+            echo "DATA:\n $(generate_post_data)"
+            tempfile=$(mktemp)
+            echo "tempfile $(tempfile)"
+            echo "SEMPUSER : $(SEMPUSER)"
+            echo "curl -s --location -u $(SEMPUSER):***** --request POST $(HOST)/SEMP/v2/config/msgVpns/$(VPN)/queues?select=queueName,msgVpnName ..."
+            code=$(curl -s --location -u $(SEMPUSER):$(SEMPPASS) --request POST '$(HOST)/SEMP/v2/config/msgVpns/$(VPN)/queues?select=queueName,msgVpnName' \
+            --header 'Content-Type:application/json' \
+            --data-raw "$(generate_post_data)" \
+            --write-out '%{http_code}' -o $tempfile)
+              echo "return code: $code"
+              if [[ $code == 200 ]]
+              then
+                echo "status : $code : ${{parameters.queueName}} queue successfully created"
+              elif [[ $code == 400 ]]
+              then
+                echo "status : $code : Object ${{parameters.queueName}} already exists as a queue"
+                exit 2
+              elif [[ $code == 401 ]]
+              then
+                echo "status : $code : Authorization Failed"
+                exit 2
+              fi
+  - stage: createsubscriptions
+    dependsOn: createqueue
+    condition: succeeded()
+    jobs:
+      - job: createsubscriptions
+        steps:
+          - script: echo creating subscription
+          - bash: |
+              tempfile=$(mktemp)
+              tempfile1=$(mktemp)
+              IFSbkp="$IFS"
+              IFS=$'\n'
+              # Subvariable=${{parameters.subscriptionName}}
+              for subscription in $(echo "${{parameters.subscriptionName}}" | tr ',' '\n'); do
+              # echo "${{parameters.subscriptionName}}""
+              # variable=${{parameters.subscriptionName}}
+              # for subscription in ${variable//,/ }
+              echo "add subscription $subscription"
+              code1=$(curl -s --location -u $(SEMPUSER):$(SEMPPASS) --request POST 'https://$(HOST)/SEMP/v2/__private_config__/msgVpns/$(VPN)/queues/${{parameters.queueName}}/subscriptions?select=subscriptionTopic,msgVpnName,queueName' \
+              --header 'Content-Type:application/json' \
+              --data-raw '{
+                    "queueName":"${{parameters.queueName}}",
+                    "subscriptionTopic":"'"$subscription"'" }' \
+              --write-out '%{http_code}' -o $tempfile)
+              echo $code1
+              if [[ $code1 == 200 ]]
+              then
+                echo "status : $code1 : $subscription subscription successfully created"
+              elif [[ $code1 == 400 ]]
+              then
+                echo "status : $code1 : Object $subscription already exists as a subscription"
+                exit 2
+              elif [[ $code1 == 401 ]]
+              then
+                echo "status : $code1 : Authorization Failed"
+                exit 2
+              fi
+              done
