@@ -9,12 +9,44 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+parameters:
+- name: serviceSelection
+  type: string
+  values:
+    - localhost
+    - nram-dev1.messaging.solace.cloud
+    - nram-dev2-aws-ohio.messaging.solace.cloud
+  default: nram-dev2-aws-ohio.messaging.solace.cloud
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-    echo hello there from nram
-  displayName: 'Run a multi-line script'
+variables:
+ - group: ${{ parameters.serviceSelection }}
+
+stages:
+  - stage: checkoutRepo
+    jobs:
+      - job: checkoutRepo
+        steps:
+          - checkout: self
+          - bash: echo "###Azure Repo Checkout###"
+  
+  - stage: provisionQueuePrep
+    jobs:
+    - job: provisionQueuePrep
+      steps:
+        - script: echo creating queue prep
+        - bash: |
+            echo "HOST : $HOST"
+            echo "SEMPUSER: $SEMPUSER"
+
+  - stage: provisionQueue
+    jobs:
+    - job: provisionQueue
+      steps:
+      - task: PythonScript@0
+        inputs:
+          scriptSource: 'filePath' # Options: filePath, inline
+          scriptPath: scripts/provision-queue.py
+          arguments: --host $(HOST) --user $(SEMPUSER) --pass $(SEMPPASS)
+          #pythonInterpreter: # Optional
+          #workingDirectory: # Optional
+          #failOnStderr: false # Optional
