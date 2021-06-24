@@ -2,7 +2,7 @@
 
 ## About
 
-This repository has sample flow files and scripts to demo a simple Solace config management from Azure DevOps pipeline.
+This repository has config and scripts required to create sample Azure DevOps flows. These flows demostrate a simple Solace config management from Azure DevOps CI/CD pipeline.
 
 ### Solace DevOps Pipeline
 
@@ -19,17 +19,27 @@ This repository has sample flow files and scripts to demo a simple Solace config
   - SEMPPASS (SEMP User password)
   - VPN (MessageVPN Name. eg:my-solace-instance) (Optional)
 
+  __Variable groups not required for Ansible playbook based pipeline__
+
 ## Sample Pipelines
 
-### [create-queue.yml](create-queue.yml)
+### [Inline](create-queue.yml)
 
 This pipeline has all required varaibles inside the pipeline YAML itslef. This creates a single queue and all queue properties are hardcoded into the YAML itself. There is no external dependency to this flow.
 
-### [create-queue-2.yml](create-queues-2.yml)
+### [Python](azure-poc2-queues2.yml)
 
 This pipeline triggers an external python script [provision-queue.py](scripts/provision-queue.py) that reads all variable information (such as Queue name, owner, spool size) are read in from an YAML file [queues.yaml](input/queues.yaml).
 
 This pipeline also uses template json to generate the payload. This should make this pipeline extensible for other artifacts such as client-username, RDP, etc.
+
+This pipeline also uses template json to generate the payload. This should make this pipeline extensible for other artifacts such as client-username, RDP, etc.
+
+### [Ansible](azure-poc-ansible.yml)
+
+This pipeline triggers an Ansible playbook for queue creation using a [template playbook](ansible-create-queues.yml) with an [inventory file](ansible-aws-brokers.ini).
+
+This can be extended for other VPN objects as well.
 
 ## Authors
 
