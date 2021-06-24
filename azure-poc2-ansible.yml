@@ -10,9 +10,6 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
 - script: pip install ansible[azure]
   displayName: 'Install Ansible and the Azure modules'
   condition: 
