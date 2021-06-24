@@ -23,7 +23,7 @@ This repository has config and scripts required to create sample Azure DevOps fl
 
 ## Sample Pipelines
 
-### [Inline](create-queue.yml)
+### [Inline](azure-poc2-inline.yml)
 
 This pipeline has all required varaibles inside the pipeline YAML itslef. This creates a single queue and all queue properties are hardcoded into the YAML itself. There is no external dependency to this flow.
 
@@ -35,7 +35,7 @@ This pipeline also uses template json to generate the payload. This should make 
 
 This pipeline also uses template json to generate the payload. This should make this pipeline extensible for other artifacts such as client-username, RDP, etc.
 
-### [Ansible](azure-poc-ansible.yml)
+### [Ansible](azure-poc2-ansible.yml)
 
 This pipeline triggers an Ansible playbook for queue creation using a [template playbook](ansible-create-queues.yml) with an [inventory file](ansible-aws-brokers.ini).
 

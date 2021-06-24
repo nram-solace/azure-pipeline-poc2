@@ -5,17 +5,17 @@ message_vpn:
 
 #queues
 queues:
-- queue_name: ansible-test-queue-13
+- queue_name: poc-ansible-q13
   subscription_topics:
-  - "test/ansible/1"
-  - "test/ansible/2"
+  - "poc/ansible/1"
+  - "poc/ansible/2"
   access_type: "exclusive"
   owner: "test-user"
   ingress_enabled: true
   egress_enabled: true
   permission: "consume"
 
-- queue_name: ansible-test-queue-23
+- queue_name: poc-ansible-q23
   subscription_topics:
   - "another/ansible/test/>"
   access_type: "non-exclusive"
