@@ -2,13 +2,10 @@
 # Message VPN
 message_vpn:
  vpn_name: "test-vpn"
- authentication_type: "internal"
- enabled: true
- serviceWebPlainTextEnabled: true
 
 #queues
 queues:
-- queue_name: ansible-test-queue-1
+- queue_name: ansible-test-queue-11
   subscription_topics:
   - "test/ansible/1"
   - "test/ansible/2"
@@ -17,7 +14,8 @@ queues:
   ingress_enabled: true
   egress_enabled: true
   permission: "consume"
-- queue_name: ansible-test-queue-2
+
+- queue_name: ansible-test-queue-21
   subscription_topics:
   - "another/ansible/test/>"
   access_type: "non-exclusive"

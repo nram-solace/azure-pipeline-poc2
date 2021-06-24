@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - name: inventoryFile
+    value: ansible-aws-brokers.ini
+
 stages:
   - stage: CheckoutRepo
     jobs:
@@ -29,5 +33,5 @@ stages:
     jobs:
       - job: runPlaybook
         steps:
-        - script: ansible-playbook ansible-create-queues.yml -i ansible-inventory.ini
-          displayName: 'Run Ansible Playbook'
+        - script: ansible-playbook -v  ansible-create-queues.yml -i $(inventoryFile)
+          displayName: 'Run Ansible Playbook with $(inventoryFile)'

@@ -1,0 +1,3 @@
+ansible-playbook -vv  ansible-create-queues.yml -i ansible-local-brokers.ini
+
+ansible-playbook -v  ansible-create-queues.yml -i ansible-aws-brokers.ini

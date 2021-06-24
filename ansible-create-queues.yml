@@ -1,9 +1,9 @@
 ---
- - hosts: aws_brokers
+ - hosts: solace
    connection: local
    gather_facts: false
    pre_tasks:
-    - include_vars: vars/test-vpn.yml
+    - include_vars: vars/queues.yml
 
    tasks:
    - name: Create Queues
