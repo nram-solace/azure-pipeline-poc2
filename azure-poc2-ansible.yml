@@ -29,5 +29,5 @@ stages:
     jobs:
       - job: runPlaybook
         steps:
-        - script: ansible-playbook create-queues.yml -i inventory.ini
+        - script: ansible-playbook ansible-create-queues.yml -i ansible-inventory.ini
           displayName: 'Run Ansible Playbook'
