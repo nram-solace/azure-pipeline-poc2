@@ -10,5 +10,5 @@ defaults:
   'egressEnabled' : true
 
 queues:
-  - queue21
-  - queue22
+  - poc-python-q1
+  - poc-python-q2
