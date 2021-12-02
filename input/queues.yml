@@ -12,3 +12,4 @@ defaults:
 queues:
   - poc-python-q1
   - poc-python-q2
+  - demo-test-q3
