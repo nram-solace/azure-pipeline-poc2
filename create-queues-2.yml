@@ -14,9 +14,9 @@ parameters:
   type: string
   values:
     - localhost
+    - nram-ubuntu
     - nram-dev1.messaging.solace.cloud
-    - nram-dev2-aws-ohio.messaging.solace.cloud
-  default: nram-dev2-aws-ohio.messaging.solace.cloud
+  default: nram-dev1.messaging.solace.cloud
 
 variables:
  - group: ${{ parameters.serviceSelection }}
